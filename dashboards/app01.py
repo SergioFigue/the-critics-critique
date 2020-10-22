@@ -2,6 +2,8 @@
 #streamlit run app01.py
 
 import streamlit as st
+import pandas as pd
+import numpy as np
 
 st.title('The Critics Critique App')
 st.header('Introduction')
@@ -34,7 +36,7 @@ st.write(range(10))
 #Imagen
 
 from PIL import Image
-img = Image.open("../Plan Proyecto Sergio.jpg")
+img = Image.open("../data/media/Plan Proyecto Sergio.jpg")
 st.image(img, width=450, caption="nombrecico o lista si son varias")
 
 #Video
@@ -92,22 +94,53 @@ firstname = st.text_input("Enter your name", "Type Here")
 if st.button("Submit"):
 	result = firstname.title()
 	st.success(result)
- 
+
+##############################################
 
 #Sidebars
-st.sidebar.header("Barra lateral")
-st.sidebar.text("texto")
+st.sidebar.header("The Critics Critique")
+
+st.sidebar.subheader("The Frame")
+radio_list_up = ["Know the app", "How critics score"]
+status = st.sidebar.radio("", (radio_list_up))
+
+if status == "Know the app":
+	st.success("RG data")
+
+elif status == "How critics score":
+	st.success("GR data")
+
+st.sidebar.subheader("NLP Scores Compared by:")
+radio_list_down = ["Website", "Platform", "Author", "Genre"]
+status = st.sidebar.radio("", (radio_list_down))
 
 
 #Funciones, a las que puedes añadir @st.cache para que vaya más rápido.
 
-def run_fxn():
-	return range(100)
+@st.cache
 
-st.write(run_fxn())
+def load_data():
+	scored_texts_analytics = pd.read_csv('../data/scored_texts_analytics.csv')
+	return scored_texts_analytics
 
+scored_texts_analytics = load_data()
 
+st.write(scored_texts_analytics)
 
+sergio = scored_texts_analytics[scored_texts_analytics['author'].str.contains('Sergio Figueroa')]['score'].mean().round(2)
+
+st.text('Average score by Sergio is %s points' % sergio)
+
+authors = sorted(scored_texts_analytics['author'].unique())
+author = st.selectbox("Select a name", authors)
+st.write("You selected", author)
+
+points = scored_texts_analytics[scored_texts_analytics['author'].str.contains(author)]['score'].mean()
+
+if isinstance(points, float):
+	points = points.round(2)
+
+st.text('And his reviews score average is %s' % points)
 
 
 #Decoradores st.progress(), st.spinner(), st.balloons
