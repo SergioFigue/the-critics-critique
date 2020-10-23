@@ -73,7 +73,7 @@ if status == "How critics score":
 	status = st.sidebar.radio("", (radio_list_down), key=2)
 
 	if status == 'Website':
-		site_deviation = scored_texts_analytics.groupby('site')['score_deviation'].mean()
+		site_deviation = scored_texts_analytics.groupby('site')[['score', 'stars_mean', 'score_deviation']].mean()
 		st.markdown('*Positive devitation means sentiment is better than score and vice versa*')
 		st.table(site_deviation)
 		
@@ -125,6 +125,8 @@ if status == "How critics score":
 		st.success('And his reviews score average is %s' % points)
 
 if status == "Conclusions":
-	st.text('bo')
+
+	st.subheader('There are a few conclusions right from the get go')	
+	st.markdown('- uno / - dos')
 
 
