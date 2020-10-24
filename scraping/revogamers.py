@@ -4,12 +4,12 @@ import time
 import pandas as pd
 
 
-def revogamers_link_retrieve(num_pages):
+def revogamers_link_retrieve(pages):
     links = []
     titles = []
 
     # pages parser
-    for i in range(num_pages):
+    for i in range(pages):
         url = f'https://www.revogamers.net/analisis-w/page/{i + 51}'
 
         # building soup

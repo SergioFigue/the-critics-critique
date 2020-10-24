@@ -4,11 +4,11 @@ import time
 import pandas as pd
 
 
-def meristation_link_retrieve(num_pages):
+def meristation_link_retrieve(pages):
     links = []
 
     # pages parser
-    for i in range(num_pages):
+    for i in range(pages):
         url = f'https://as.com/meristation/analisis/{281 - i}'
 
         # building soup

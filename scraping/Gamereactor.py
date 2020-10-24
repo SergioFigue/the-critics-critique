@@ -4,12 +4,12 @@ import time
 import pandas as pd
 
 
-def gamereactor_link_retrieve(num_pages):
+def gamereactor_link_retrieve(pages):
     links = []
     titles = []
 
     # pages parser
-    for i in range(num_pages):
+    for i in range(pages):
         url = f'https://www.gamereactor.es/analisis/?page={i + 26}'
 
         # building soup
@@ -90,5 +90,6 @@ def gamereactor_dict(links, titles):
 def gamereactor_dataframe(links, titles):
     result_revo = gamereactor_dict(links, titles)
     gamereactor_df = pd.DataFrame.from_dict(result_revo, orient='index')
+
     return gamereactor_df
 

@@ -4,12 +4,12 @@ import time
 import pandas as pd
 
 
-def vandal_link_retrieve(num_pages):
+def vandal_link_retrieve(pages):
     links = []
     titles = []
 
     # pages parser
-    for i in range(num_pages):
+    for i in range(pages):
         url = f"https://vandal.elespanol.com/analisis/videojuegos/inicio/{i * 45}"
 
         # building soup

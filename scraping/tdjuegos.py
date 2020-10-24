@@ -4,12 +4,12 @@ import time
 import pandas as pd
 
 
-def tdjuegos_link_retrieve(num_pages):
+def tdjuegos_link_retrieve(pages):
     links = []
     titles = []
 
     # pages parser
-    for i in range(num_pages):
+    for i in range(pages):
         url = f"https://www.3djuegos.com/novedades/analisis/juegos/{i + 100}pf0f0f0/fecha/"
 
         # building soup
