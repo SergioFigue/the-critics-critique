@@ -23,12 +23,16 @@ def main(pages):
     # import dataframes site by site
     links_gamereactor, titles_gamereactor = gam.gamereactor_link_retrieve(pages)
     gamereactor_df = gam.gamereactor_dataframe(links_gamereactor, titles_gamereactor)
+
     links_revogamers, titles_revogamers = rev.revogamers_link_retrieve(pages)
     revogamers_df = rev.revogamers_dataframe(links_revogamers, titles_revogamers)
+
     links_tdjuegos, titles_tdjuegos = tdj.tdjuegos_link_retrieve(pages)
     tdjuegos_df = tdj.tdjuegos_dataframe(links_tdjuegos, titles_tdjuegos)
+
     links_meristation = mer.meristation_link_retrieve(pages)
     meristation_df = mer.meristation_dataframe(links_meristation)
+
     links_vandal, titles_vandal = van.vandal_link_retrieve(pages)
     vandal_df = van.vandal_dataframe(links_vandal, titles_vandal)
 
