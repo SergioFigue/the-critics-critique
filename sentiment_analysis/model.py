@@ -41,7 +41,7 @@ def apply_sentiment_model(all_sites):
         print(all_sites['game'])
         all_sites['stars'] = all_sites['text'].apply(lambda x: np.nan)
 
-    # Uncomment this lines if you need a checkpoint
+    # Uncomment these lines if you need a checkpoint
     # finally:
     #     all_sites.to_csv('../data/labeled_texts1.csv', index=False)
 
