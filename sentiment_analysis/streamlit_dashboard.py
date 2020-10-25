@@ -73,7 +73,7 @@ if status == "How critics score":
     # Sidebar 2 - NLP Stars vs Scores
 
     st.sidebar.subheader("NLP Stars vs Scores")
-    radio_list_down = ["Website", "Platform", "Author", "Company"]
+    radio_list_down = ["Website", "Author", "Company", "Platform"]
     status = st.sidebar.radio("", radio_list_down, key=2)
 
     if status == 'Website':
@@ -203,10 +203,30 @@ if status == "How critics score":
         companies_df = pd.merge(c_companies, s_companies, on="company")
         companies_df.drop(companies_df[companies_df['company'] == 'None'].index, inplace=True)
 
-        fig4 = px.scatter(companies_df, x="score", y="score_deviation", color="company", size='game')
-        fig4.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)', 'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
+        fig4 = px.scatter(companies_df, x="score", y="score_deviation", color="company", size='game',
+                          template="simple_white")
         st.plotly_chart(fig4, use_container_width=True)
 
+    if status == 'Platform':
+
+        st.subheader('Focusing on the last console generation and PC')
+        st.markdown('*Left value: real score, right value: NLP prediction*')
+
+        switch_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("Switch")]
+        switch_plot = switch_df[['score', 'stars_mean']].mean()
+        ps4_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("PS4")]
+        ps4_plot = ps4_df[['score', 'stars_mean']].mean()
+        xbox_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("Xbox One")]
+        xbox_plot = xbox_df[['score', 'stars_mean']].mean()
+        pc_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("PC")]
+        pc_plot = pc_df[['score', 'stars_mean']].mean()
+
+        platform_plot = ps4_plot.to_frame(name='PS4').join(switch_plot.to_frame(name='Switch')).join(
+            xbox_plot.to_frame(name='Xbox One')).join(pc_plot.to_frame(name='PC'))
+
+        fig5 = px.line(platform_plot, labels={"variable": "Platform", "index": "", "value": "Score"},
+                       template="simple_white")
+        st.plotly_chart(fig5, use_container_width=True)
 
 if status == "Conclusions":
     st.subheader('There are a few conclusions right from the get go')
