@@ -32,6 +32,21 @@ classifier = pipeline(
     model=model,
     tokenizer=tokenizer)
 
+
+def split_and_classification(review):
+    n = 1500
+    func_points = []
+    review_splitted = [(review[i:i + n]) for i in range(0, len(review), n)]
+    global_stars = (classifier(review_splitted))
+
+    for classification in global_stars:
+        grade = int(classification['label'].split(' ')[0])
+        func_points.append(grade)
+    func_stars_mean = round(np.mean(func_points), 2)
+
+    return func_stars_mean
+
+
 # Sidebar 1
 st.sidebar.header("The Critics Critique")
 
@@ -75,8 +90,10 @@ if status == "Take a sample":
     st.subheader('Run the code')
     st.markdown("* Push the button to start scraping the website and critize the critic. Just a few seconds.")
 
-    def revogamers_link_retrieve():
+    col1, col2, col3, col4, col5 = st.beta_columns(5)
 
+
+    def revogamers_link_retrieve():
         url = f'https://www.revogamers.net/analisis-w/page/2'
         html = requests.get(url).content
         soup = BeautifulSoup(html, 'lxml')
@@ -87,10 +104,8 @@ if status == "Take a sample":
 
         return func_link, func_title
 
-    def revogamers_streamlit_sentiment_analysis(func_link):
-        n = 1500
-        func_points = []
 
+    def revogamers_streamlit_sentiment_analysis(func_link):
         review_html = requests.get(func_link).content
         soup = BeautifulSoup(review_html, 'lxml')
 
@@ -99,32 +114,206 @@ if status == "Take a sample":
         article = soup.find('div', {'class': 'gp-entry-content'}).find_all('p')
         func_review = [tag.text for tag in article]
         func_review = ' '.join(func_review)
-        review_splitted = [(func_review[i:i + n]) for i in range(0, len(func_review), n)]
-        global_stars = (classifier(review_splitted))
-
-        for classification in global_stars:
-            grade = int(classification['label'].split(' ')[0])
-            func_points.append(grade)
-        func_stars_mean = round(np.mean(func_points), 2)
 
         func_score = soup.find('div', {'class': 'gp-rating-score'}).text.strip()
         func_score = float(func_score)
         func_score_adj = func_score / 2
 
-        return func_author, func_score, func_score_adj, func_stars_mean
+        return func_author, func_score, func_score_adj, func_review
 
-    if st.button("Revogamers"):
+
+    if col1.button("revogamers"):
         link, title = revogamers_link_retrieve()
-        author, score, score_adj, stars_mean = revogamers_streamlit_sentiment_analysis(link)
-
+        author, score, score_adj, func_review = revogamers_streamlit_sentiment_analysis(link)
+        stars_mean = split_and_classification(func_review)
         st.write(title)
-        st.write(author,"'s score is", score)
+        st.write(author, "'s score is", score)
         st.write("Model's stars score is", stars_mean)
 
 
+    def gamereactor_link_retrieve():
+        url = f'https://www.gamereactor.es/analisis/'
+        html = requests.get(url).content
+        soup = BeautifulSoup(html, 'lxml')
+        article = soup.find('section', {'id': 'textlist'}).find('article')
+
+        func_link = f"https://www.gamereactor.es{article.find('a')['href']}"
+        func_title = article.find('h3').text
+
+        return func_link, func_title
 
 
+    def gamereactor_streamlit_sentiment_analysis(func_link):
+        review_html = requests.get(func_link).content
+        soup = BeautifulSoup(review_html, 'lxml')
 
+        func_author = soup.find('li', {'class': 'publishAuthor bullet'}).text
+
+        article = soup.find('div', {'class': 'breadtext'}).find('div')
+        p_tags = article.find_all('p')
+        func_review = [tag.text for tag in p_tags]
+        func_review = ' '.join(func_review)
+
+        func_score = soup.find('div', {'class': 'bigScoreWrapper'}).find('img')['alt']
+        func_score = float(func_score)
+        func_score_adj = func_score / 2
+
+        return func_author, func_score, func_score_adj, func_review
+
+
+    if col2.button("Gamereactor"):
+        link, title = gamereactor_link_retrieve()
+        author, score, score_adj, func_review = gamereactor_streamlit_sentiment_analysis(link)
+        stars_mean = split_and_classification(func_review)
+        st.write(title)
+        st.write(author, "'s score is", score)
+        st.write("Model's stars score is", stars_mean)
+
+
+    def tdjuegos_link_retrieve():
+        url = f"https://www.3djuegos.com/novedades/analisis/juegos/0f0f0f0/fecha/"
+
+        html = requests.get(url).content
+        soup = BeautifulSoup(html, 'lxml')
+        article = soup.find('h2')
+
+        func_link = article.find('a')['href']
+        func_title = article.find('a')['title']
+
+        return func_link, func_title
+
+
+    def tdjuegos_streamlit_sentiment_analysis(func_link):
+        review_html = requests.get(link).content
+        soup = BeautifulSoup(review_html, 'lxml')
+
+        func_author = soup.find('a', {'class': 'c7 n'}).text
+
+        p_tags = p_tags = soup.find('div', {'class': 'lh27 url_lineas article_body0 mar_temp_0'}).find_all('p')
+        review = [tag.text for tag in p_tags]
+        func_review = ' '.join(review)
+
+        try:
+            score = soup.find('div', {'class': 'nota_ana_3 fftext b nota_interior2'}).text
+            score = score.replace(',', '.')
+
+        except AttributeError:
+            pass
+
+        func_score = float(score)
+        func_score_adj = func_score / 2
+
+        return func_author, func_score, func_score_adj, func_review
+
+
+    if col3.button("3D Juegos"):
+        link, title = tdjuegos_link_retrieve()
+        author, score, score_adj, func_review = tdjuegos_streamlit_sentiment_analysis(link)
+        stars_mean = split_and_classification(func_review)
+        st.write(title)
+        st.write(author, "'s score is", score)
+        st.write("Model's stars score is", stars_mean)
+
+
+    def meristation_link_retrieve():
+        url = f'https://as.com/meristation/analisis/'
+        html = requests.get(url).content
+        soup = BeautifulSoup(html, 'lxml')
+        articles = soup.find_all('h2')
+
+        for a in articles:
+            if a.find('a') == None:
+                pass
+            else:
+                func_link = a.find('a')['href']
+
+        return func_link
+
+
+    def meristation_streamlit_sentiment_analysis(func_link):
+        review_html = requests.get(link).content
+        soup = BeautifulSoup(review_html, 'lxml')
+
+        title = soup.find('div', {'class': 'ga-h-tl'}).text.strip('\n')
+
+        func_author = 'None'
+
+        try:
+            func_author = soup.find('p', {'class': 'art-aut-wr'}).find('a').text.strip('\n')
+        except AttributeError:
+            pass
+        try:
+            func_author = soup.find('li', {'class': 'art-aut-wr'}).text.strip('\n')
+        except AttributeError:
+            pass
+
+        p_tags = soup.find('div', {'class': 'art-body'}).find_all('p')
+        review = [tag.text for tag in p_tags]
+        func_review = ' '.join(review)
+
+        try:
+            score = soup.find('span', {'class': 'rv-sc sc-h'}).text
+        except AttributeError:
+            pass
+        try:
+            score = soup.find('span', {'class': 'rv-sc sc-m'}).text
+        except AttributeError:
+            pass
+        try:
+            score = soup.find('span', {'class': 'rv-sc sc-l'}).text
+        except AttributeError:
+            pass
+
+        func_score = float(score)
+        func_score_adj = func_score / 2
+
+        return title, func_author, func_score, func_score_adj, func_review
+
+
+    if col4.button("meristation"):
+        link = meristation_link_retrieve()
+        title, author, score, score_adj, func_review = meristation_streamlit_sentiment_analysis(link)
+        stars_mean = split_and_classification(func_review)
+        st.write(title)
+        st.write(author, "'s score is", score)
+        st.write("Model's stars score is", stars_mean)
+
+
+    def vandal_link_retrieve():
+        url = f"https://vandal.elespanol.com/analisis/videojuegos"
+        html = requests.get(url).content
+        soup = BeautifulSoup(html, 'lxml')
+        article = soup.find('div', {'class': 'caja300 afterclearer'})
+        func_link = article.find('a')['href']
+        func_title = article.find('a')['title']
+
+        return func_link, func_title
+
+
+    def vandal_streamlit_sentiment_analysis(func_link):
+        review_html = requests.get(link).content
+        soup = BeautifulSoup(review_html, 'lxml')
+
+        func_author = soup.find('span', {'class': 'reviewer'}).text
+
+        p_tags = soup.find('div', {'class': 'textart'}).find_all('p')
+        review = [tag.text for tag in p_tags]
+        func_review = ' '.join(review).strip()
+
+        score = soup.find('div', {'class': 'fichajuego mt03 tleft'}).text
+        func_score = float(score)
+        func_score_adj = func_score / 2
+
+        return func_author, func_score, func_score_adj, func_review
+
+
+    if col5.button("Vandal"):
+        link, title = vandal_link_retrieve()
+        author, score, score_adj, func_review = vandal_streamlit_sentiment_analysis(link)
+        stars_mean = split_and_classification(func_review)
+        st.write(title)
+        st.write(author, "'s score is", score)
+        st.write("Model's stars score is", stars_mean)
 
 
 if status == "How critics score":
@@ -294,5 +483,9 @@ if status == "How critics score":
         st.plotly_chart(fig5, use_container_width=True)
 
 if status == "Conclusions":
-    st.subheader('There are a few conclusions right from the get go')
-    st.markdown('- uno / - dos')
+    st.subheader('More than 15,500 review later, I conclude that:')
+    st.markdown('- In 4 out of 5 outlets, human score is frequently better than NLP score ')
+    st.markdown('- The better the game, the bigger the score deviation ')
+    st.markdown('- Authors make no distinction between platforms')
+    st.markdown('In conclusion: Null hypothesis is partially rejected')
+    
