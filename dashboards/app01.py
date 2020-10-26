@@ -4,6 +4,10 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import requests
+from bs4 import BeautifulSoup
+from transformers import pipeline
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 st.title('The Critics Critique App')
 st.header('Introduction')
@@ -11,6 +15,73 @@ st.subheader('Steps')
 st.text('This is an example')
 st.code('if a == 1:\n    print(a)', language='python')
 st.markdown("This is **text** with markdown")
+
+
+def revogamers_link_retrieve():
+       
+	url = f'https://www.revogamers.net/analisis-w/page/2'
+	html = requests.get(url).content
+	soup = BeautifulSoup(html, 'lxml')
+	article = soup.find('h2')
+
+	link = article.find('a')['href']
+	title = article.find('a')['title']
+		        
+	return link, title
+
+def revogamers_streamlit_test(link, title):
+    reviews_dict = {}
+
+    review_html = requests.get(link).content
+    soup = BeautifulSoup(review_html, 'lxml')
+
+    author = soup.find('span', {'class': 'gp-post-meta gp-meta-author'}).find('a').text
+
+    article = soup.find('div', {'class': 'gp-entry-content'}).find_all('p')
+    review = [tag.text for tag in article]
+    review = ' '.join(review)
+
+    score = soup.find('div', {'class': 'gp-rating-score'}).text.strip()
+    score = float(score)
+    score_adj = score / 2
+
+    return author, review, score, score_adj
+
+def sentiment_analysis_bert_base_multilingual_uncased(review):
+    n = 1500
+    points = []
+    
+    review_splitted = [(review[i:i + n]) for i in range(0, len(review), n)]
+    global_stars = (classifier(review_splitted))
+
+    for classification in global_stars:
+        grade = int(classification['label'].split(' ')[0])
+        points.append(grade)
+    stars_mean = round(np.mean(points), 2)
+
+    return stars_mean
+
+
+#Botón Button cliclable
+
+nlp_model = 'nlptown/bert-base-multilingual-uncased-sentiment'
+tokenizer = AutoTokenizer.from_pretrained(nlp_model)
+model = AutoModelForSequenceClassification.from_pretrained(nlp_model)
+classifier = pipeline(
+        'sentiment-analysis', 
+        model=model, 
+        tokenizer=tokenizer)
+
+if st.button("Revogamers"):
+	link, title = revogamers_link_retrieve()
+	author, review, score, score_adj = revogamers_streamlit_test(link, title)
+	stars_mean = sentiment_analysis_bert_base_multilingual_uncased(review)
+
+	st.write(title)
+	st.write(author)
+	st.write(score)
+	st.write(score_adj)
+	st.write(stars_mean)
 
 
 #Error/Colorful Text
@@ -21,27 +92,6 @@ st.info("Information!")
 st.warning("This is a Warning")
 
 st.error("This is an error")
-
-#Writing Text para poner funciones dentro
-
-st.write(range(10))
-
-#st.write(data_frame)
-#st.dataframe(df.style.highlight_max(axis=0))
-#st.write(mpl_fig)
-#st.pyplot(fig)
-#st.write(plotly_fig)
-#st.plotly_chart()
-
-#Imagen
-
-from PIL import Image
-img = Image.open("../data/media/Plan Proyecto Sergio.jpg")
-st.image(img, width=450, caption="nombrecico o lista si son varias")
-
-#Video
-
-vid_file = open("../data/media/xcloud_gamereactor.mp4","rb").read()
 
 
 
@@ -81,10 +131,7 @@ score = st.slider("Choose a score",1,10)
 if score == 3:
 	st.text("Tres")
 
-#Botón Button cliclable
 
-if st.button("Guess score"):
-	st.text("function missing")
 
 
 #Recibe imput primera parte por encima y segunda dentro del cuadro y le ponemos un botón para imputar y un resultado con color verde. Casi igual pero más grande con text_area.
@@ -115,32 +162,7 @@ radio_list_down = ["Website", "Platform", "Author", "Genre"]
 status = st.sidebar.radio("", (radio_list_down))
 
 
-#Funciones, a las que puedes añadir @st.cache para que vaya más rápido.
 
-@st.cache
-
-def load_data():
-	scored_texts_analytics = pd.read_csv('../data/scored_texts_analytics.csv')
-	return scored_texts_analytics
-
-scored_texts_analytics = load_data()
-
-st.write(scored_texts_analytics)
-
-sergio = scored_texts_analytics[scored_texts_analytics['author'].str.contains('Sergio Figueroa')]['score'].mean().round(2)
-
-st.text('Average score by Sergio is %s points' % sergio)
-
-authors = sorted(scored_texts_analytics['author'].unique())
-author = st.selectbox("Select a name", authors)
-st.write("You selected", author)
-
-points = scored_texts_analytics[scored_texts_analytics['author'].str.contains(author)]['score'].mean()
-
-if isinstance(points, float):
-	points = points.round(2)
-
-st.text('And his reviews score average is %s' % points)
 
 
 #Decoradores st.progress(), st.spinner(), st.balloons

@@ -5,6 +5,10 @@ import time
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
+import requests
+from bs4 import BeautifulSoup
+from transformers import pipeline
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 
 #def run_streamlit(scored_texts_analytics):
@@ -19,6 +23,14 @@ scored_texts_analytics = load_data()
 st.beta_set_page_config(layout="centered")
 st.title('The Critics Critique App Presentation')
 
+# NLP Model
+nlp_model = 'nlptown/bert-base-multilingual-uncased-sentiment'
+tokenizer = AutoTokenizer.from_pretrained(nlp_model)
+model = AutoModelForSequenceClassification.from_pretrained(nlp_model)
+classifier = pipeline(
+    'sentiment-analysis',
+    model=model,
+    tokenizer=tokenizer)
 
 # Sidebar 1
 st.sidebar.header("The Critics Critique")
@@ -61,6 +73,59 @@ if status == "Take a sample":
         st.write(scored_texts_analytics)
 
     st.subheader('Run the code')
+    st.markdown("* Push the button to start scraping the website and critize the critic. Just a few seconds.")
+
+    def revogamers_link_retrieve():
+
+        url = f'https://www.revogamers.net/analisis-w/page/2'
+        html = requests.get(url).content
+        soup = BeautifulSoup(html, 'lxml')
+        article = soup.find('h2')
+
+        func_link = article.find('a')['href']
+        func_title = article.find('a')['title']
+
+        return func_link, func_title
+
+    def revogamers_streamlit_sentiment_analysis(func_link):
+        n = 1500
+        func_points = []
+
+        review_html = requests.get(func_link).content
+        soup = BeautifulSoup(review_html, 'lxml')
+
+        func_author = soup.find('span', {'class': 'gp-post-meta gp-meta-author'}).find('a').text
+
+        article = soup.find('div', {'class': 'gp-entry-content'}).find_all('p')
+        func_review = [tag.text for tag in article]
+        func_review = ' '.join(func_review)
+        review_splitted = [(func_review[i:i + n]) for i in range(0, len(func_review), n)]
+        global_stars = (classifier(review_splitted))
+
+        for classification in global_stars:
+            grade = int(classification['label'].split(' ')[0])
+            func_points.append(grade)
+        func_stars_mean = round(np.mean(func_points), 2)
+
+        func_score = soup.find('div', {'class': 'gp-rating-score'}).text.strip()
+        func_score = float(func_score)
+        func_score_adj = func_score / 2
+
+        return func_author, func_score, func_score_adj, func_stars_mean
+
+    if st.button("Revogamers"):
+        link, title = revogamers_link_retrieve()
+        author, score, score_adj, stars_mean = revogamers_streamlit_sentiment_analysis(link)
+
+        st.write(title)
+        st.write(author,"'s score is", score)
+        st.write("Model's stars score is", stars_mean)
+
+
+
+
+
+
 
 if status == "How critics score":
 

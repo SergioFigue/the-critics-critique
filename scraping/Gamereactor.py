@@ -10,7 +10,7 @@ def gamereactor_link_retrieve(pages):
 
     # pages parser
     for i in range(pages):
-        url = f'https://www.gamereactor.es/analisis/?page={i + 26}'
+        url = f'https://www.gamereactor.es/analisis/?page={i + 1}'
 
         # building soup
         html = requests.get(url).content

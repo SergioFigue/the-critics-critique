@@ -10,7 +10,7 @@ def revogamers_link_retrieve(pages):
 
     # pages parser
     for i in range(pages):
-        url = f'https://www.revogamers.net/analisis-w/page/{i + 51}'
+        url = f'https://www.revogamers.net/analisis-w/page/{i + 1}'
 
         # building soup
         html = requests.get(url).content

@@ -9,7 +9,7 @@ def meristation_link_retrieve(pages):
 
     # pages parser
     for i in range(pages):
-        url = f'https://as.com/meristation/analisis/{281 - i}'
+        url = f'https://as.com/meristation/analisis/{331 - i}'
 
         # building soup
         html = requests.get(url).content
