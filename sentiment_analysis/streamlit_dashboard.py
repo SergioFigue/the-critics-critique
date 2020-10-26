@@ -9,18 +9,18 @@ import requests
 from bs4 import BeautifulSoup
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
+st.beta_set_page_config(layout="centered")
 
 #def run_streamlit(scored_texts_analytics):
 
 
+@st.cache
 def load_data():
     return pd.read_csv('../data/scored_texts_analytics.csv')
 
 
-#@st.cache
 scored_texts_analytics = load_data()
-st.beta_set_page_config(layout="centered")
+
 st.title('The Critics Critique App Presentation')
 
 # NLP Model
@@ -93,6 +93,7 @@ if status == "Take a sample":
     col1, col2, col3, col4, col5 = st.beta_columns(5)
 
 
+    @st.cache
     def revogamers_link_retrieve():
         url = f'https://www.revogamers.net/analisis-w/page/2'
         html = requests.get(url).content
@@ -105,6 +106,7 @@ if status == "Take a sample":
         return func_link, func_title
 
 
+    @st.cache
     def revogamers_streamlit_sentiment_analysis(func_link):
         review_html = requests.get(func_link).content
         soup = BeautifulSoup(review_html, 'lxml')
@@ -131,6 +133,7 @@ if status == "Take a sample":
         st.write("Model's stars score is", stars_mean)
 
 
+    @st.cache
     def gamereactor_link_retrieve():
         url = f'https://www.gamereactor.es/analisis/'
         html = requests.get(url).content
@@ -142,7 +145,7 @@ if status == "Take a sample":
 
         return func_link, func_title
 
-
+    @st.cache
     def gamereactor_streamlit_sentiment_analysis(func_link):
         review_html = requests.get(func_link).content
         soup = BeautifulSoup(review_html, 'lxml')
@@ -170,6 +173,7 @@ if status == "Take a sample":
         st.write("Model's stars score is", stars_mean)
 
 
+    @st.cache
     def tdjuegos_link_retrieve():
         url = f"https://www.3djuegos.com/novedades/analisis/juegos/0f0f0f0/fecha/"
 
@@ -183,6 +187,7 @@ if status == "Take a sample":
         return func_link, func_title
 
 
+    @st.cache
     def tdjuegos_streamlit_sentiment_analysis(func_link):
         review_html = requests.get(link).content
         soup = BeautifulSoup(review_html, 'lxml')
@@ -215,6 +220,7 @@ if status == "Take a sample":
         st.write("Model's stars score is", stars_mean)
 
 
+    @st.cache
     def meristation_link_retrieve():
         url = f'https://as.com/meristation/analisis/'
         html = requests.get(url).content
@@ -230,6 +236,7 @@ if status == "Take a sample":
         return func_link
 
 
+    @st.cache
     def meristation_streamlit_sentiment_analysis(func_link):
         review_html = requests.get(link).content
         soup = BeautifulSoup(review_html, 'lxml')
@@ -279,6 +286,7 @@ if status == "Take a sample":
         st.write("Model's stars score is", stars_mean)
 
 
+    @st.cache
     def vandal_link_retrieve():
         url = f"https://vandal.elespanol.com/analisis/videojuegos"
         html = requests.get(url).content
@@ -290,6 +298,7 @@ if status == "Take a sample":
         return func_link, func_title
 
 
+    @st.cache
     def vandal_streamlit_sentiment_analysis(func_link):
         review_html = requests.get(link).content
         soup = BeautifulSoup(review_html, 'lxml')
@@ -483,9 +492,8 @@ if status == "How critics score":
         st.plotly_chart(fig5, use_container_width=True)
 
 if status == "Conclusions":
-    st.subheader('More than 15,500 review later, I conclude that:')
+    st.subheader('More than 15,500 review later, this model uncovered the truth:')
     st.markdown('- In 4 out of 5 outlets, human score is frequently better than NLP score ')
     st.markdown('- The better the game, the bigger the score deviation ')
     st.markdown('- Authors make no distinction between platforms')
-    st.markdown('In conclusion: Null hypothesis is partially rejected')
-    
+    st.markdown('**In conclusion: Spanish reviewers inflate video games scores**')
