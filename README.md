@@ -5,6 +5,8 @@ My hypothesis is: spanish reviewers overrate video games.
 
 The Critics Critique is a **NLP based app** consisting in two scripts. In first place, a secondary script fetch five different websites looking for video games reviews. Then, the main script apply a sentiment analysis powered by a pre-treained BERT multilengual model, return a score based on wording and let you visualize results through an interactive dashboard.
 
+The original idea comes from a personal feeling by the author and many others in the video games press industry. But also, from what we see in international review aggregators.
+
 ## Technologies
 
 The Critics Critique was develoed on python 3.7 and requires popular libraries: requests and beautiful soup for web scraping; pandas and transformers by hugging face (AutoTokenizer, AutoModelForSequenceClassificationby nlptown) for data manipulation, cleaning and sentiment classification; and seaborn, plotly express and streamlit for visualization and reporting. 
