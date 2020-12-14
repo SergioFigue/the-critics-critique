@@ -7,7 +7,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 def acquire(data):
     # The full study is based on data/all_sites.csv
     all_sites = pd.read_csv(data)
-    all_sites = all_sites[0:4]
+    all_sites = all_sites[0:10]
     print('Data loaded')
     return all_sites
 
@@ -69,24 +69,12 @@ def stars_mean_to_score(review):
     return score
 
 
-# def create_stars_mean_col(all_sites):
-#     all_sites['stars_mean'] = all_sites['stars'].apply(lambda x: stars_mean_to_score(x))
-#
-#     return all_sites
-#
-#
-# def score_half(all_sites):
-#     # Score halved column for standardized comparison
-#     all_sites['score_adj'] = all_sites['score'].apply(lambda x: x/2)
-#
-#     return all_sites
-
-
 def final_dataframe(all_sites):
     model = model_construction()
     all_sites = apply_sentiment_model(all_sites, model)
     all_sites['stars_mean'] = all_sites['stars'].apply(lambda x: stars_mean_to_score(x))
     all_sites['score_adj'] = all_sites['score'].apply(lambda x: x / 2)
-    scored_texts = all_sites[['site', 'author', 'game', 'score', 'score_adj', 'stars_mean', 'company', 'platform', 'genre']]
+    all_sites = all_sites[['site', 'author', 'game', 'score', 'score_adj', 'stars_mean', 'company', 'platform', 'genre']]
     print('New dataframe assambled. Proceeding to cleaning and standarizing raws...')
-    return scored_texts
+
+    return all_sites

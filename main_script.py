@@ -1,7 +1,7 @@
 import argparse
 import sentiment_analysis.model as mod
 import sentiment_analysis.wrangling as wra
-import sentiment_analysis.streamlit_dashboard as stm
+from streamlit import bootstrap
 
 
 def argument_parser():
@@ -15,11 +15,12 @@ def argument_parser():
 def main(data):
     all_sites = mod.acquire(data)
     scored_texts = mod.final_dataframe(all_sites)
-    scored_texts_analytics = wra.score_deviation_func(scored_texts)
-    stm.run_streamlit(scored_texts_analytics)
+    wra.score_deviation_func(scored_texts)
+    real_script = 'sentiment_analysis/streamlit_dashboard.py'
+    bootstrap.run(real_script, f'run.py {real_script}', [])
 
 
 if __name__ == '__main__':
     arguments = argument_parser()
-    print(arguments.data)
+    print(f'you choosed: {arguments.data}')
     main(arguments.data)

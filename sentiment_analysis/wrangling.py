@@ -89,6 +89,6 @@ def score_deviation_func(scored_texts):
     scored_texts['score_deviation'] = (scored_texts['stars_mean'] - scored_texts['score_adj']) \
                                       / scored_texts['score_adj'] * 100
 
-    scored_texts_analytics = scored_texts
-    print('Your data is now fully operative. Procceed to analyze.')
-    return scored_texts_analytics
+    scored_texts.to_csv('./data/wrangled_data/scored_texts.csv', index=False)
+    print('Your data is now fully operative. Proceed to analyze with Streamlit in a new browser tab.')
+
