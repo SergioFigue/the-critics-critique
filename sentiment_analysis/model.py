@@ -7,35 +7,42 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 def acquire(data):
     # The full study is based on data/all_sites.csv
     all_sites = pd.read_csv(data)
+    all_sites = all_sites[0:4]
+    print('Data loaded')
     return all_sites
 
 
-# Select model
-nlp_model = 'nlptown/bert-base-multilingual-uncased-sentiment'
-tokenizer = AutoTokenizer.from_pretrained(nlp_model)
-model = AutoModelForSequenceClassification.from_pretrained(nlp_model)
+def model_construction():
+    # Select model
+    nlp_model = 'nlptown/bert-base-multilingual-uncased-sentiment'
+    tokenizer = AutoTokenizer.from_pretrained(nlp_model)
+    model = AutoModelForSequenceClassification.from_pretrained(nlp_model)
 
-# Classifier
-classifier = pipeline(
-        'sentiment-analysis',
-        model=model,
-        tokenizer=tokenizer)
+    # Classifier
+    classifier = pipeline(
+            'sentiment-analysis',
+            model=model,
+            tokenizer=tokenizer)
+    print('BERT base multilingual model loaded')
+
+    return classifier
 
 
-def sentiment_analysis_bert_base_multilingual_uncased(review):
+def sentiment_analysis_bert_base_multilingual_uncased(review, classifier):
     # Split large texts in fragments of 1500 words guarantees that you don't override BERT max tokens (512)
     n = 1500
 
     # Returns a vector with a BERT score per review fragment
-    review_splitted = [(review[i:i + n]) for i in range(0, len(review), n)]
+    review_splitted = [(review[i:i+n]) for i in range(0, len(review), n)]
     global_stars = (classifier(review_splitted))
 
     return global_stars
 
 
-def apply_sentiment_model(all_sites):
+def apply_sentiment_model(all_sites, classifier):
+    print('Analysing sentiment may take hours depending on your words and rows count. Be patient...')
     try:
-        all_sites['stars'] = all_sites['text'].apply(lambda x: sentiment_analysis_bert_base_multilingual_uncased(x))
+        all_sites['stars'] = all_sites['text'].apply(lambda x: sentiment_analysis_bert_base_multilingual_uncased(x, classifier))
 
     except RuntimeError:
         print(all_sites['game'])
@@ -62,21 +69,24 @@ def stars_mean_to_score(review):
     return score
 
 
-def create_stars_mean_col(all_sites):
-    all_sites['stars_mean'] = all_sites['stars'].apply(lambda x: stars_mean_to_score(x))
-
-    return all_sites
-
-
-def score_half(all_sites):
-    # Score halved column for standardized comparison
-    all_sites['score_adj'] = all_sites['score'].apply(lambda x: x/2)
-
-    return all_sites
+# def create_stars_mean_col(all_sites):
+#     all_sites['stars_mean'] = all_sites['stars'].apply(lambda x: stars_mean_to_score(x))
+#
+#     return all_sites
+#
+#
+# def score_half(all_sites):
+#     # Score halved column for standardized comparison
+#     all_sites['score_adj'] = all_sites['score'].apply(lambda x: x/2)
+#
+#     return all_sites
 
 
 def final_dataframe(all_sites):
-    scored_texts = all_sites[['site', 'author', 'game', 'score', 'score_adj',
-                              'stars_mean', 'company', 'platform', 'genre']]
-
+    model = model_construction()
+    all_sites = apply_sentiment_model(all_sites, model)
+    all_sites['stars_mean'] = all_sites['stars'].apply(lambda x: stars_mean_to_score(x))
+    all_sites['score_adj'] = all_sites['score'].apply(lambda x: x / 2)
+    scored_texts = all_sites[['site', 'author', 'game', 'score', 'score_adj', 'stars_mean', 'company', 'platform', 'genre']]
+    print('New dataframe assambled. Proceeding to cleaning and standarizing raws...')
     return scored_texts

@@ -90,5 +90,5 @@ def score_deviation_func(scored_texts):
                                       / scored_texts['score_adj'] * 100
 
     scored_texts_analytics = scored_texts
-
+    print('Your data is now fully operative. Procceed to analyze.')
     return scored_texts_analytics
