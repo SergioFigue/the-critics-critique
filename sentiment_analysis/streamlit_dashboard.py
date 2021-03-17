@@ -16,7 +16,7 @@ st.beta_set_page_config(layout="centered")
 
 @st.cache(show_spinner=False)
 def load_data():
-    return pd.read_csv('./data/wrangled_data/scored_texts.csv')
+    return pd.read_csv('../data/scored_texts_analytics.csv')
 
 
 scored_texts_analytics = load_data()
@@ -60,7 +60,7 @@ def split_and_classification(review):
 def insert_img():
     from PIL import Image
 
-    return Image.open("./data/media/stadia_platforms.jpg")
+    return Image.open("../data/media/stadia_platforms.jpg")
 
 
 img = insert_img()
@@ -79,7 +79,7 @@ if status == "Know the app":
 
     my_slot1 = st.empty()
 
-    vid_file = open("./data/media/xcloud_gamereactor.mp4", "rb").read()
+    vid_file = open("../data/media/xcloud_gamereactor.mp4", "rb").read()
     st.video(vid_file)
 
     time.sleep(5)
@@ -108,7 +108,7 @@ if status == "Take a sample":
         st.write(scored_texts_analytics)
 
     st.subheader('Run the code')
-    st.markdown("* Push the button to start scraping the website and critize the critic. Just a few seconds.")
+    st.markdown("* Push the button to start scraping the website and criticize the critic. Just a few seconds.")
 
     col1, col2, col3, col4, col5 = st.beta_columns(5)
 
@@ -172,7 +172,7 @@ if status == "Take a sample":
 
         func_author = soup.find('li', {'class': 'publishAuthor bullet'}).text
 
-        article = soup.find('div', {'class': 'breadtext'}).find('div')
+        article = soup.find('div', {'class': 'breadtext'}).find('div', {'id': 'page0'})
         p_tags = article.find_all('p')
         func_review = [tag.text for tag in p_tags]
         func_review = ' '.join(func_review)
@@ -192,7 +192,7 @@ if status == "Take a sample":
         st.write(author, "'s score is", score)
         st.write("Model's stars score is", stars_mean)
 
-
+    #@Deprecated: 3D Juegos stop scoring reviews on December 15, 2020.
     @st.cache(show_spinner=False)
     def tdjuegos_link_retrieve():
         url = f"https://www.3djuegos.com/novedades/analisis/juegos/0f0f0f0/fecha/"
