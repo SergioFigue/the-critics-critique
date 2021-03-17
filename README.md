@@ -1,7 +1,7 @@
 # The-critics-critique
 My hypothesis is: spanish reviewers overrate video games.
 
-[The Critics Critique conclusions](https://github.com/SergioFigue/the-critics-critique/blob/master/The-Critics-Critique_conclusions.png)
+![The Critics Critique conclusions](https://github.com/SergioFigue/the-critics-critique/blob/master/The-Critics-Critique_conclusions.png)
 
 
 ## What is this for
@@ -24,7 +24,7 @@ The main script can take any dataframe of any number of lines. You might need to
 
 Lastly, the dashboard includes easy-to-use options for granular analytics and categorical agreggations.
 
-[Video Games - Scattered scores by outlet](https://github.com/SergioFigue/the-critics-critique/blob/master/Score_site_deviation_all.png)
+![Video Games - Scattered scores by outlet](https://github.com/SergioFigue/the-critics-critique/blob/master/Score_site_deviation_all.png)
 
 
 ### Example Data
@@ -37,7 +37,7 @@ Every raw example includes the following columns: site, url, game name, producer
 
 The dashboard compares how video games critics score a review versus the sentiment said review conveys to the reader according to a pretrained BERT NLP model. Let users show the whole dataframe or just fragments related to categorical variables. This way, it's really easy to visually find and show different insights from thousands and thousands of texts.
 
-[Video Games - Average game score by company](https://github.com/SergioFigue/the-critics-critique/blob/master/Score_plotted_byCompany.png)
+![Video Games - Average game score by company](https://github.com/SergioFigue/the-critics-critique/blob/master/Score_plotted_byCompany.png)
 
 ## Conclusions
 
