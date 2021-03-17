@@ -57,7 +57,7 @@ def gamereactor_dict(links, titles):
                     company = box.find('a').text
 
             # Text & Cleaning - From Scraping
-            article = soup.find('div', {'class': 'breadtext'}).find('div')
+            article = soup.find('div', {'class': 'breadtext'}).find('div', {'id': 'page0'})
             p_tags = article.find_all('p')
             review = [tag.text for tag in p_tags]
             review = ' '.join(review)

@@ -42,8 +42,8 @@ def main(pages):
     all_sites.dropna(inplace=True)
     all_sites = shuffle(all_sites)
     all_sites.reset_index(drop=True, inplace=True)
-    all_sites.to_csv('../data/all_sites.csv', index=False)
-
+    all_sites.to_csv('./data/test2_2021.csv', index=False)
+    print(f'A new dataframe was created!')
 
 if __name__ == '__main__':
     arguments = argument_parser()

@@ -10,7 +10,10 @@ def tdjuegos_link_retrieve(pages):
 
     # pages parser
     for i in range(pages):
-        url = f"https://www.3djuegos.com/novedades/analisis/juegos/{i}pf0f0f0/fecha/"
+        if i == 0:
+            url = f"https://www.3djuegos.com/novedades/analisis/juegos/0f0f0f0/fecha/"
+        else:
+            url = f"https://www.3djuegos.com/novedades/analisis/juegos/{i}pf0f0f0/fecha/"
 
         # building soup
         html = requests.get(url).content
