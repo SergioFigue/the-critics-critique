@@ -1,6 +1,9 @@
 # The-critics-critique
 My hypothesis is: spanish reviewers overrate video games.
 
+[The Critics Critique conclusions](https://github.com/SergioFigue/the-critics-critique/blob/master/The-Critics-Critique_conclusions.png)
+
+
 ## What is this for
 
 The Critics Critique is a **NLP based app** consisting in two scripts. In first place, a secondary script fetch five different websites looking for video games reviews. Then, the main script apply a sentiment analysis powered by a pre-treained BERT multilengual model, return a score based on wording and let you visualize results through an interactive dashboard.
@@ -21,6 +24,9 @@ The main script can take any dataframe of any number of lines. You might need to
 
 Lastly, the dashboard includes easy-to-use options for granular analytics and categorical agreggations.
 
+[Video Games - Scattered scores by outlet](https://github.com/SergioFigue/the-critics-critique/blob/master/Score_site_deviation_all.png)
+
+
 ### Example Data
 
 The main analysis was created from data counting for a total of 15.551 valid reviews. Some texts are 10 years old!
@@ -30,6 +36,8 @@ Every raw example includes the following columns: site, url, game name, producer
 ### Reporting: the dashboard
 
 The dashboard compares how video games critics score a review versus the sentiment said review conveys to the reader according to a pretrained BERT NLP model. Let users show the whole dataframe or just fragments related to categorical variables. This way, it's really easy to visually find and show different insights from thousands and thousands of texts.
+
+[Video Games - Average game score by company](https://github.com/SergioFigue/the-critics-critique/blob/master/Score_plotted_byCompany.png)
 
 ## Conclusions
 
