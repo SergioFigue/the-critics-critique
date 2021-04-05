@@ -45,6 +45,7 @@ def main(pages):
     all_sites.to_csv('./data/test2_2021.csv', index=False)
     print(f'A new dataframe was created!')
 
+
 if __name__ == '__main__':
     arguments = argument_parser()
     print(arguments.pages)

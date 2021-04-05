@@ -118,7 +118,8 @@ def tdjuegos_dict(links, titles):
             review = ' '.join(review)
 
             # Score & Clean & Transform - From Scraping
-            score = 7
+            # Warning! 3D Juegos stop scoring reviews on Dec 2020. Automatically scored as 0 to be deleted afterwards
+            score = 0
 
             try:
                 score = soup.find('div', {'class': 'nota_ana_3 fftext b nota_interior2'}).text
