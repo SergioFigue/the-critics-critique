@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.utils import shuffle
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
@@ -7,6 +8,8 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 def acquire(data):
     # The full study is based on data/all_sites.csv
     all_sites = pd.read_csv(data)
+    all_sites = shuffle(all_sites)
+    all_sites.reset_index(drop=True, inplace=True)
     all_sites = all_sites[0:10]
     print('Data loaded')
     return all_sites

@@ -39,7 +39,7 @@ def vandal_link_retrieve(pages, data):
                 links.append(link)
                 titles.append(a.find('a')['title'])
             else:
-                print(f'{len(titles)} new games added.')
+                print(f'{len(titles)} new games added from Vandal.')
                 repeated = True
                 break
 
@@ -79,7 +79,7 @@ def gamereactor_link_retrieve(pages, data):
                 links.append(f"https://www.gamereactor.es{article.find_all('a')[1]['href']}")
                 titles.append(game)
             else:
-                print(f'{len(titles)} new games added.')
+                print(f'{len(titles)} new games added from Gamereactor.')
                 repeated = True
                 break
 
@@ -119,7 +119,7 @@ def revogamers_link_retrieve(pages, data):
                 links.append(link)
                 titles.append(a.find('a')['title'])
             else:
-                print(f'{len(titles)} new games added.')
+                print(f'{len(titles)} new games added from Revogamers.')
                 repeated = True
                 break
 
@@ -174,5 +174,5 @@ def meristation_link_retrieve(pages, data):
         if 'analisis' not in link:
             links.remove(link)
 
-    print(f'{len(links)} new games added.')
+    print(f'{len(links)} new games added from Meristation.')
     return links

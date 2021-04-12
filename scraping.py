@@ -1,6 +1,5 @@
 import argparse
 import pandas as pd
-from sklearn.utils import shuffle
 
 import scraping.Gamereactor as gam
 import scraping.revogamers as rev
@@ -36,12 +35,10 @@ def main(pages):
     links_vandal, titles_vandal = van.vandal_link_retrieve(pages)
     vandal_df = van.vandal_dataframe(links_vandal, titles_vandal)
 
-    # merge, shuffle and export all review together
+    # merge and export all review together
     sites_dataframes = [gamereactor_df, meristation_df, revogamers_df, vandal_df, tdjuegos_df]
     all_sites = pd.concat(sites_dataframes)
     all_sites.dropna(inplace=True)
-    all_sites = shuffle(all_sites)
-    all_sites.reset_index(drop=True, inplace=True)
     all_sites.to_csv('./data/test2_2021.csv', index=False)
     print(f'A new dataframe was created!')
 

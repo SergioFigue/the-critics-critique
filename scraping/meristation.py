@@ -92,20 +92,6 @@ def meristation_dict(links):
             # Author - From Scraping
             author = meri_author(soup)
 
-            # author = 'None'
-            #
-            # try:
-            #     author = soup.find('p', {'class': 'art-aut-wr'}).find('a').text.strip('\n')
-            #
-            # except AttributeError:
-            #     pass
-            #
-            # try:
-            #     author = soup.find('li', {'class': 'art-aut-wr'}).text.strip('\n')
-            #
-            # except AttributeError:
-            #     pass
-
             # Company, Genre & Platform - From Scraping
             genre = 'None'
             company = 'None'
@@ -138,26 +124,11 @@ def meristation_dict(links):
             # Score & Clean & Transform - From Scraping
             score = meri_score(soup)
 
-            # 3 different paths for score in Meristation to replace the dummy mean value 7
-            # try:
-            #     score = soup.find('span', {'class': 'rv-sc sc-h'}).text
-            #
-            # except AttributeError:
-            #     pass
-            #
-            # try:
-            #     score = soup.find('span', {'class': 'rv-sc sc-m'}).text
-            #
-            # except AttributeError:
-            #     pass
-            #
-            # try:
-            #     score = soup.find('span', {'class': 'rv-sc sc-l'}).text
-            #
-            # except AttributeError:
-            #     pass
-            #
-            score = float(score)
+            try:
+                score = float(score)
+
+            except AttributeError:
+                pass
 
             # Add to a dict
             reviews_dict[i] = {'site': 'meristation',

@@ -1,6 +1,5 @@
 import argparse
 import pandas as pd
-from sklearn.utils import shuffle
 
 import scraping.Gamereactor as gam
 import scraping.revogamers as rev
@@ -34,8 +33,7 @@ def main(pages, data):
     links_vandal, titles_vandal = ret.vandal_link_retrieve(pages, data)
     vandal_df = van.vandal_dataframe(links_vandal, titles_vandal)
 
-    # merge, shuffle and export all review together
-
+    # merge and export all reviews together
     old_data = pd.read_csv(data)
     all_sites = pd.concat([old_data, vandal_df, gamereactor_df, revogamers_df, meristation_df],
                           ignore_index=True, sort=False)
