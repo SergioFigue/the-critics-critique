@@ -33,6 +33,8 @@ def main(pages, data):
     links_vandal, titles_vandal = ret.vandal_link_retrieve(pages, data)
     vandal_df = van.vandal_dataframe(links_vandal, titles_vandal)
 
+    print(f'Note: 3D Juegos ditched scores in Dec 2020, thus was excluded from the updater')
+
     # merge and export all reviews together
     old_data = pd.read_csv(data)
     all_sites = pd.concat([old_data, vandal_df, gamereactor_df, revogamers_df, meristation_df],

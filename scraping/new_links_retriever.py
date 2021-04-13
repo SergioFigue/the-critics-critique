@@ -9,7 +9,7 @@ import pandas as pd
 # vandal updater
 def vandal_latest_links(data):
     all_sites = pd.read_csv(data)
-    filtered_df = all_sites[all_sites['site'] == 'Vandal'].head(30)
+    filtered_df = all_sites[all_sites['site'] == 'Vandal']
     return filtered_df['url_link'].tolist()
 
 
@@ -31,7 +31,7 @@ def vandal_link_retrieve(pages, data):
         soup = BeautifulSoup(html, 'lxml')
         articles = soup.find_all('div', {'class': 'caja300 afterclearer'})
 
-        # links & game titles retrieve. New: checking if old to stop adding raws.
+        # links & game titles retrieve. New: checking if old to stop adding rows.
         for a in articles:
             link = a.find('a')['href']
 
@@ -39,7 +39,7 @@ def vandal_link_retrieve(pages, data):
                 links.append(link)
                 titles.append(a.find('a')['title'])
             else:
-                print(f'{len(titles)} new games added from Vandal.')
+                print(f'{len(titles)} new games found on Vandal.')
                 repeated = True
                 break
 
@@ -49,7 +49,8 @@ def vandal_link_retrieve(pages, data):
 # gamereactor updater
 def gamereactor_latest_games(data):
     all_sites = pd.read_csv(data)
-    filtered_df = all_sites[all_sites['site'] == 'Gamereactor'].head(30)
+    filtered_df = all_sites[all_sites['site'] == 'Gamereactor']
+
     return filtered_df['game'].tolist()
 
 
@@ -71,7 +72,7 @@ def gamereactor_link_retrieve(pages, data):
         soup = BeautifulSoup(html, 'lxml')
         articles = soup.find('section', {'id': 'textlist'}).find_all('article')
 
-        # links & game titles retrieve. New: checking if old to stop adding raws.
+        # links & game titles retrieve. New: checking if old to stop adding rows.
         for article in articles:
             game = article.find('h3').text
 
@@ -79,7 +80,7 @@ def gamereactor_link_retrieve(pages, data):
                 links.append(f"https://www.gamereactor.es{article.find_all('a')[1]['href']}")
                 titles.append(game)
             else:
-                print(f'{len(titles)} new games added from Gamereactor.')
+                print(f'{len(titles)} new games found on Gamereactor.')
                 repeated = True
                 break
 
@@ -89,7 +90,7 @@ def gamereactor_link_retrieve(pages, data):
 # revogamers updater
 def revogamers_latest_links(data):
     all_sites = pd.read_csv(data)
-    filtered_df = all_sites[all_sites['site'] == 'revogamers'].head(30)
+    filtered_df = all_sites[all_sites['site'] == 'revogamers']
     return filtered_df['url_link'].tolist()
 
 
@@ -119,7 +120,7 @@ def revogamers_link_retrieve(pages, data):
                 links.append(link)
                 titles.append(a.find('a')['title'])
             else:
-                print(f'{len(titles)} new games added from Revogamers.')
+                print(f'{len(titles)} new games found on Revogamers.')
                 repeated = True
                 break
 
@@ -134,7 +135,7 @@ def revogamers_link_retrieve(pages, data):
 # meristation updater
 def meristation_latest_links(data):
     all_sites = pd.read_csv(data)
-    filtered_df = all_sites[all_sites['site'] == 'meristation'].head(30)
+    filtered_df = all_sites[all_sites['site'] == 'meristation']
     return filtered_df['url_link'].tolist()
 
 
@@ -155,10 +156,10 @@ def meristation_link_retrieve(pages, data):
         soup = BeautifulSoup(html, 'lxml')
         articles = soup.find_all('h2')
 
-        # links & game titles retrieve. New: checking if old to stop adding raws.
+        # links & game titles retrieve. New: checking if old to stop adding rows.
         for a in articles:
 
-            if a.find('a') == None:
+            if a.find('a') is None:
                 pass
             else:
                 link = a.find('a')['href']
@@ -174,5 +175,9 @@ def meristation_link_retrieve(pages, data):
         if 'analisis' not in link:
             links.remove(link)
 
-    print(f'{len(links)} new games added from Meristation.')
+    print(f'{len(links)} new games found on Meristation.')
     return links
+
+
+
+

@@ -127,7 +127,7 @@ def meristation_dict(links):
             try:
                 score = float(score)
 
-            except AttributeError:
+            except ValueError:
                 pass
 
             # Add to a dict
