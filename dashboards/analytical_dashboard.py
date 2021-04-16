@@ -9,22 +9,21 @@ import requests
 from bs4 import BeautifulSoup
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-st.beta_set_page_config(layout="centered")
 
-#def run_streamlit(scored_texts_analytics):
+st.beta_set_page_config(layout="centered")
 
 
 @st.cache(show_spinner=False)
 def load_data():
-    return pd.read_csv('../data/scored_texts_analytics.csv')
+    return pd.read_csv('./data/wrangled_data/scored_texts.csv')
 
 
 scored_texts_analytics = load_data()
 
 st.title('The Critics Critique App')
 
-# NLP Model
 
+# NLP Model
 @st.cache(show_spinner=False)
 def model_function():
     nlp_model = 'nlptown/bert-base-multilingual-uncased-sentiment'
@@ -59,7 +58,7 @@ def split_and_classification(review):
 @st.cache(show_spinner=False)
 def insert_img():
     from PIL import Image
-    img = Image.open("../data/media/stadia_platforms.jpg")
+    img = Image.open("./data/media/stadia_platforms.jpg")
 
     return img
 
@@ -80,7 +79,7 @@ if status == "Know the app":
 
     my_slot1 = st.empty()
 
-    vid_file = open("../data/media/xcloud_gamereactor.mp4", "rb").read()
+    vid_file = open("./data/media/xcloud_gamereactor.mp4", "rb").read()
     st.video(vid_file)
 
     time.sleep(5)
@@ -94,7 +93,7 @@ if status == "Know the app":
                 "the **sentiment** said review conveys to the reader according to a **pretrained BERT NLP model**.")
 
     st.subheader('Where data comes from?')
-    st.markdown("Data was extracted scraping five video game outlets for a total of **15.551 valid reviews**. "
+    st.markdown("Data was extracted scraping five video game outlets, adding more than **16.000 valid reviews**. "
                 "Some texts are 10 years old!")
 
     st.subheader('What are you trying to tell us?')
@@ -193,52 +192,8 @@ if status == "Take a sample":
         st.write(author, "'s score is", score)
         st.write("Model's stars score is", stars_mean)
 
-
-    @st.cache(show_spinner=False)
-    def tdjuegos_link_retrieve():
-        url = f"https://www.3djuegos.com/novedades/analisis/juegos/0f0f0f0/fecha/"
-
-        html = requests.get(url).content
-        soup = BeautifulSoup(html, 'lxml')
-        article = soup.find('h2')
-
-        func_link = article.find('a')['href']
-        func_title = article.find('a')['title']
-
-        return func_link, func_title
-
-
-    @st.cache(show_spinner=False)
-    def tdjuegos_streamlit_sentiment_analysis(func_link):
-        review_html = requests.get(link).content
-        soup = BeautifulSoup(review_html, 'lxml')
-
-        func_author = soup.find('a', {'class': 'c7 n'}).text
-
-        p_tags = p_tags = soup.find('div', {'class': 'lh27 url_lineas article_body0 mar_temp_0'}).find_all('p')
-        review = [tag.text for tag in p_tags]
-        func_review = ' '.join(review)
-
-        try:
-            score = soup.find('div', {'class': 'nota_ana_3 fftext b nota_interior2'}).text
-            score = score.replace(',', '.')
-
-        except AttributeError:
-            pass
-
-        func_score = float(score)
-        func_score_adj = func_score / 2
-
-        return func_author, func_score, func_score_adj, func_review
-
-
     if col3.button("3D Juegos"):
-        link, title = tdjuegos_link_retrieve()
-        author, score, score_adj, func_review = tdjuegos_streamlit_sentiment_analysis(link)
-        stars_mean = split_and_classification(func_review)
-        st.write(title)
-        st.write(author, "'s score is", score)
-        st.write("Model's stars score is", stars_mean)
+        st.write("Wops! Deprecated: 3D Juegos stop scoring reviews on December 15, 2020.")
 
 
     @st.cache(show_spinner=False)
@@ -519,4 +474,3 @@ if status == "Conclusions":
     st.markdown('**In conclusion: Spanish reviewers inflate video games scores, only when the score is fat**')
     st.text("")
     st.button("Download and Try your self for free!")
-
