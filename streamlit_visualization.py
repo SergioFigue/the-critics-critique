@@ -3,8 +3,10 @@ from streamlit import bootstrap
 
 def main():
 
-    real_script = 'dashboards/analytical_dashboard.py'
-    bootstrap.run(real_script, f'run.py {real_script}', [])
+    analytical_dashboard = 'dashboards/analytical_dashboard.py'
+    authors_dashboard = 'dashboards/author_search_app.py'
+    bootstrap.run(analytical_dashboard, f'run.py {analytical_dashboard}', [])
+    bootstrap.run(authors_dashboard, f'run.py {authors_dashboard}', [])
 
 
 if __name__ == '__main__':

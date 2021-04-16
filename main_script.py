@@ -16,7 +16,7 @@ def main(data):
     all_sites = mod.acquire(data)
     scored_texts = mod.final_dataframe(all_sites)
     wra.score_deviation_func(scored_texts)
-    real_script = 'sentiment_analysis/streamlit_dashboard.py'
+    real_script = 'dashboards/analytical_dashboard.py'
     bootstrap.run(real_script, f'run.py {real_script}', [])
 
 

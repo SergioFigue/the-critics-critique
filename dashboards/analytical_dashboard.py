@@ -9,13 +9,14 @@ import requests
 from bs4 import BeautifulSoup
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from PIL import Image
 
 st.beta_set_page_config(layout="centered")
 
 
 @st.cache(show_spinner=False)
 def load_data():
-    return pd.read_csv('./data/wrangled_data/scored_texts.csv')
+    return pd.read_csv('./data/scored_texts_analytics.csv')
 
 
 scored_texts_analytics = load_data()
@@ -57,13 +58,10 @@ def split_and_classification(review):
 
 @st.cache(show_spinner=False)
 def insert_img():
-    from PIL import Image
-    img = Image.open("./data/media/stadia_platforms.jpg")
+    screenshot = Image.open("./data/media/stadia_platforms.jpg")
 
-    return img
+    return screenshot
 
-
-img = insert_img()
 
 # Sidebar 1
 st.sidebar.header("The Critics Critique")
@@ -79,10 +77,9 @@ if status == "Know the app":
 
     my_slot1 = st.empty()
 
-    vid_file = open("./data/media/xcloud_gamereactor.mp4", "rb").read()
-    st.video(vid_file)
+    st.image(Image.open("./data/media/the_untrustable.jpg"), width=700)
 
-    time.sleep(5)
+    time.sleep(3)
     my_slot1.error('Never!')
     st.error('Ever!')
 
@@ -101,7 +98,7 @@ if status == "Know the app":
 
 if status == "Take a sample":
 
-    st.image(img, width=450)
+    st.image(insert_img(), width=450)
 
     if st.checkbox("Take a look at the DataFrame"):
         st.markdown("*This is how the real score compares with the stars suggested by the model*")
@@ -149,7 +146,7 @@ if status == "Take a sample":
         author, score, score_adj, func_review = revogamers_streamlit_sentiment_analysis(link)
         stars_mean = split_and_classification(func_review)
         st.write(title)
-        st.write(author, "'s score is", score)
+        st.write(author, "'s score is", score, "and adjusted score is", score_adj)
         st.write("Model's stars score is", stars_mean)
 
 
@@ -189,7 +186,7 @@ if status == "Take a sample":
         author, score, score_adj, func_review = gamereactor_streamlit_sentiment_analysis(link)
         stars_mean = split_and_classification(func_review)
         st.write(title)
-        st.write(author, "'s score is", score)
+        st.write(author, "'s score is", score, "and adjusted score is", score_adj)
         st.write("Model's stars score is", stars_mean)
 
     if col3.button("3D Juegos"):
@@ -258,7 +255,7 @@ if status == "Take a sample":
         title, author, score, score_adj, func_review = meristation_streamlit_sentiment_analysis(link)
         stars_mean = split_and_classification(func_review)
         st.write(title)
-        st.write(author, "'s score is", score)
+        st.write(author, "'s score is", score, "and adjusted score is", score_adj)
         st.write("Model's stars score is", stars_mean)
 
 
@@ -297,7 +294,7 @@ if status == "Take a sample":
         author, score, score_adj, func_review = vandal_streamlit_sentiment_analysis(link)
         stars_mean = split_and_classification(func_review)
         st.write(title)
-        st.write(author, "'s score is", score)
+        st.write(author, "'s score is", score, "and adjusted score is", score_adj)
         st.write("Model's stars score is", stars_mean)
 
 
@@ -305,7 +302,7 @@ if status == "How critics score":
 
     st.markdown("*This is how the real score compares with the stars suggested by the model*")
 
-    st.image(img, width=450)
+    st.image(insert_img(), width=450)
 
     # Sidebar 2 - NLP Stars vs Scores
 
@@ -466,7 +463,7 @@ if status == "How critics score":
         st.plotly_chart(fig5, use_container_width=True)
 
 if status == "Conclusions":
-    st.image(img, width=450)
+    st.image(insert_img(), width=450)
     st.subheader('More than 15,500 review later, this model uncovered the truth:')
     st.markdown('- In 4 out of 5 outlets, human score is frequently better than NLP score')
     st.markdown('- Human scores tent towards extreme opinions, the model is more moderate')
