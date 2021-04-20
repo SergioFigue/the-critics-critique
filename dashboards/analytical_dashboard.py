@@ -16,7 +16,7 @@ st.beta_set_page_config(layout="centered")
 
 @st.cache(show_spinner=False)
 def load_data():
-    return pd.read_csv('./data/wrangled_data/scored_texts.csv')
+    return pd.read_csv('./scored_texts.csv')
 
 
 scored_texts_analytics = load_data()
@@ -85,7 +85,7 @@ if status == "Know the app":
 
     st.empty()
 
-    st.subheader('What is this?')
+    st.subheader('What is The Critics Critique?')
     st.markdown("This dashboard compares how video games critics **score** a review versus "
                 "the **sentiment** said review conveys to the reader according to a **pretrained BERT NLP model**.")
 
