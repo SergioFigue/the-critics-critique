@@ -16,7 +16,7 @@ st.beta_set_page_config(layout="centered")
 
 @st.cache(show_spinner=False)
 def load_data():
-    return pd.read_csv('./data/scored_texts_analytics.csv')
+    return pd.read_csv('./data/wrangled_data/scored_texts.csv')
 
 
 scored_texts_analytics = load_data()
@@ -444,15 +444,19 @@ if status == "How critics score":
     if status == 'Platform':
 
         st.subheader('Focusing on the last console generation and PC')
-        st.markdown('*Left value: real score, right value: NLP prediction*')
+        st.markdown('*Left value: real score adjusted (halved), right value: NLP prediction*')
 
         switch_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("Switch")]
+        switch_df['score'] = switch_df['score'] / 2
         switch_plot = switch_df[['score', 'stars_mean']].mean()
         ps4_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("PS4")]
+        ps4_df['score'] = ps4_df['score'] / 2
         ps4_plot = ps4_df[['score', 'stars_mean']].mean()
         xbox_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("Xbox One")]
+        xbox_df['score'] = xbox_df['score'] / 2
         xbox_plot = xbox_df[['score', 'stars_mean']].mean()
         pc_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("PC")]
+        pc_df['score'] = pc_df['score'] / 2
         pc_plot = pc_df[['score', 'stars_mean']].mean()
 
         platform_plot = ps4_plot.to_frame(name='PS4').join(switch_plot.to_frame(name='Switch')).join(

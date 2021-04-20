@@ -10,7 +10,6 @@ def acquire(data):
     all_sites = pd.read_csv(data)
     all_sites = shuffle(all_sites)
     all_sites.reset_index(drop=True, inplace=True)
-    all_sites = all_sites[0:10]
     print('Data loaded')
     return all_sites
 
