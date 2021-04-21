@@ -10,13 +10,15 @@ from bs4 import BeautifulSoup
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from PIL import Image
+from streamlit import bootstrap
+
 
 st.beta_set_page_config(layout="centered")
 
 
 @st.cache(show_spinner=False)
 def load_data():
-    return pd.read_csv('./scored_texts.csv')
+    return pd.read_csv('../scored_texts.csv')
 
 
 scored_texts_analytics = load_data()
@@ -475,3 +477,7 @@ if status == "Conclusions":
     st.markdown('**In conclusion: Spanish reviewers inflate video games scores, only when the score is fat**')
     st.text("")
     st.button("Download and Try your self for free!")
+
+
+analytical_dashboard = 'dashboards/analytical_dashboard.py'
+bootstrap.run(analytical_dashboard, f'run.py {analytical_dashboard}', [])
