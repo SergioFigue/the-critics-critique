@@ -25,7 +25,7 @@ st.title('The Critics Critique App')
 
 
 # NLP Model
-'''@st.cache(show_spinner=False)
+@st.cache(show_spinner=False)
 def model_function():
     nlp_model = 'nlptown/bert-base-multilingual-uncased-sentiment'
     tokenizer = AutoTokenizer.from_pretrained(nlp_model)
@@ -53,7 +53,7 @@ def split_and_classification(review):
         func_points.append(grade)
     func_stars_mean = round(np.mean(func_points), 2)
 
-    return func_stars_mean'''
+    return func_stars_mean
 
 
 @st.cache(show_spinner=False)
@@ -96,7 +96,7 @@ if status == "Know the app":
     st.subheader('What are you trying to tell us?')
     st.markdown("My hypothesis is: **spanish reviewers overrate video games**.")
 
-'''if status == "Take a sample":
+if status == "Take a sample":
 
     st.image(insert_img(), width=450)
 
@@ -295,7 +295,7 @@ if status == "Know the app":
         stars_mean = split_and_classification(func_review)
         st.write(title)
         st.write(author, "'s score is", score, "and adjusted score is", score_adj)
-        st.write("Model's stars score is", stars_mean)'''
+        st.write("Model's stars score is", stars_mean)
 
 
 if status == "How critics score":
