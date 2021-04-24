@@ -10,8 +10,6 @@ from bs4 import BeautifulSoup
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from PIL import Image
-from streamlit import bootstrap
-
 
 st.beta_set_page_config(layout="centered")
 
@@ -164,6 +162,7 @@ if status == "Take a sample":
 
         return func_link, func_title
 
+
     @st.cache(show_spinner=False)
     def gamereactor_streamlit_sentiment_analysis(func_link):
         review_html = requests.get(func_link).content
@@ -299,7 +298,6 @@ if status == "Take a sample":
         st.write(author, "'s score is", score, "and adjusted score is", score_adj)
         st.write("Model's stars score is", stars_mean)
 
-
 if status == "How critics score":
 
     st.markdown("*This is how the real score compares with the stars suggested by the model*")
@@ -414,7 +412,6 @@ if status == "How critics score":
         st.pyplot(fig3)
 
     if status == "Company":
-
         st.subheader('Names matter more than quality?')
         st.markdown('**Mean score deviation** is the difference between score and prediction in % and looks like this')
         st.markdown('·*Positive deviation means sentiment is better than score and vice versa*')
@@ -444,7 +441,6 @@ if status == "How critics score":
         st.plotly_chart(fig4, use_container_width=True)
 
     if status == 'Platform':
-
         st.subheader('Focusing on the last console generation and PC')
         st.markdown('*Left value: real score adjusted (halved), right value: NLP prediction*')
 
@@ -477,7 +473,3 @@ if status == "Conclusions":
     st.markdown('**In conclusion: Spanish reviewers inflate video games scores, only when the score is fat**')
     st.text("")
     st.button("Download and Try your self for free!")
-
-
-analytical_dashboard = 'dashboards/analytical_dashboard.py'
-bootstrap.run(analytical_dashboard, f'run.py {analytical_dashboard}', [])
