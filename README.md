@@ -49,6 +49,14 @@ More than 15,500 review later, this model revealed the truth:
 
 **In conclusion: Spanish reviewers inflate video games scores**
 
+
+## Next Steps and updates
+
+In March 2021, The Critics Critique development went back on track:
+* NEW: updater.py added to fetch new reviews (Note: 3D Juegos stop scoring reviews on December 15, 2020)
+* IN CONSTRUCTION: Heroku app to simplify sharing dashboards online (compability troubles found)
+
+
 ## Special thanks
 
 This project wouldn't been possible without the generous support and assistance of the Ironhack lead and assistante teachers, my pals at Gamereactor and, most importantly, my 24/7 fullstack developer and husband.
