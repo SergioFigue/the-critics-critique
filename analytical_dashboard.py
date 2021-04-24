@@ -11,7 +11,8 @@ from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from PIL import Image
 
-st.beta_set_page_config(layout="centered")
+
+st.beta_set_page_config(page_title="The-Critics-Critique-App", layout="centered")
 
 
 @st.cache(show_spinner=False)
@@ -25,7 +26,9 @@ st.title('The Critics Critique App')
 
 
 # NLP Model
-@st.cache(show_spinner=False)
+
+
+#@st.cache(show_spinner=False)
 def model_function():
     nlp_model = 'nlptown/bert-base-multilingual-uncased-sentiment'
     tokenizer = AutoTokenizer.from_pretrained(nlp_model)

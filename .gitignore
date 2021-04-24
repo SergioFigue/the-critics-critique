@@ -133,3 +133,6 @@ data/
 
 #old notebooks
 notebooks/
+
+#.idea
+.idea/
