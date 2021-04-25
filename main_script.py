@@ -16,8 +16,8 @@ def main(data):
     all_sites = mod.acquire(data)
     scored_texts = mod.final_dataframe(all_sites)
     wra.score_deviation_func(scored_texts)
-    dashboard = 'dashboards/analytical_dashboard.py'
-    bootstrap.run(dashboard, f'run.py {dashboard}', [], {})
+    dashboard = 'analytical_dashboard.py'
+    bootstrap.run(dashboard, f'run.py {dashboard}', [])
 
 
 if __name__ == '__main__':

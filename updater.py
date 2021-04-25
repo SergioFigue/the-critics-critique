@@ -36,12 +36,11 @@ def main(pages, data):
     print(f'Note: 3D Juegos ditched scores in Dec 2020, thus was excluded from the updater')
 
     # merge and export all reviews together
-    old_data = pd.read_csv(data)
-    all_sites = pd.concat([old_data, vandal_df, gamereactor_df, revogamers_df, meristation_df],
+    all_sites = pd.concat([vandal_df, gamereactor_df, revogamers_df, meristation_df],
                           ignore_index=True, sort=False)
     all_sites.dropna(inplace=True)
     all_sites.reset_index(drop=True, inplace=True)
-    all_sites.to_csv('./data/up_to_date_all.csv', index=False)
+    all_sites.to_csv('./data/new_reviews.csv', index=False)
     print(f'Your dataframe is now up to date!')
 
 
