@@ -16,7 +16,7 @@ st.beta_set_page_config(layout="centered")
 
 @st.cache(show_spinner=False)
 def load_data():
-    return pd.read_csv('./data/wrangled_data/scored_texts.csv')
+    return pd.read_csv('../updated_scored_texts.csv')
 
 
 scored_texts_analytics = load_data()
@@ -25,7 +25,7 @@ st.title('The Critics Critique App')
 
 
 # NLP Model
-@st.cache(show_spinner=False)
+#@st.cache(show_spinner=False)
 def model_function():
     nlp_model = 'nlptown/bert-base-multilingual-uncased-sentiment'
     tokenizer = AutoTokenizer.from_pretrained(nlp_model)
@@ -41,7 +41,7 @@ def model_function():
 classifier = model_function()
 
 
-@st.cache(show_spinner=False)
+#@st.cache(show_spinner=False)
 def split_and_classification(review):
     n = 1500
     func_points = []
@@ -60,7 +60,7 @@ def split_and_classification(review):
 def insert_img():
     from PIL import Image
 
-    return Image.open("./data/media/stadia_platforms.jpg")
+    return Image.open("../stadia_platforms.jpg")
 
 
 img = insert_img()
@@ -79,10 +79,10 @@ if status == "Know the app":
 
     my_slot1 = st.empty()
 
-    vid_file = open("./data/media/xcloud_gamereactor.mp4", "rb").read()
-    st.video(vid_file)
+    #vid_file = open("./data/media/xcloud_gamereactor.mp4", "rb").read()
+    #st.video(vid_file)
 
-    time.sleep(5)
+    #time.sleep(5)
     my_slot1.error('Never!')
     st.error('Ever!')
 

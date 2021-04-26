@@ -1,12 +1,12 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
+#import numpy as np
 import time
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-import requests
-from bs4 import BeautifulSoup
+#import requests
+#from bs4 import BeautifulSoup
 #from transformers import pipeline
 #from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from PIL import Image
@@ -17,7 +17,7 @@ st.beta_set_page_config(page_title="The-Critics-Critique-App", layout="centered"
 
 @st.cache(show_spinner=False)
 def load_data():
-    return pd.read_csv('../updated_scored_texts.csv')
+    return pd.read_csv('updated_scored_texts.csv')
 
 
 scored_texts_analytics = load_data()
@@ -61,7 +61,7 @@ st.title('The Critics Critique App')
 
 @st.cache(show_spinner=False)
 def insert_img():
-    screenshot = Image.open("../stadia_platforms.jpg")
+    screenshot = Image.open("stadia_platforms.jpg")
 
     return screenshot
 
@@ -80,7 +80,7 @@ if status == "Know the app":
 
     my_slot1 = st.empty()
 
-    st.image(Image.open("../the_untrustable.jpg"), width=700)
+    st.image(Image.open("the_untrustable.jpg"), width=700)
 
     time.sleep(3)
     my_slot1.error('Never!')
