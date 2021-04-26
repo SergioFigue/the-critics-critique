@@ -6,12 +6,12 @@ from PIL import Image
 st.beta_set_page_config(layout="centered")
 
 
-st.image(Image.open("./data/media/stadia_platforms.jpg"), width=450)
+#st.image(Image.open("./data/media/stadia_platforms.jpg"), width=450)
 
 
 @st.cache(show_spinner=False)
 def load_data():
-    return pd.read_csv('./data/scored_texts_analytics.csv')
+    return pd.read_csv('../updated_scored_texts.csv')
 
 
 scored_texts_analytics = load_data()

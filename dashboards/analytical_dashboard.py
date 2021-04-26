@@ -17,7 +17,7 @@ st.beta_set_page_config(page_title="The-Critics-Critique-App", layout="centered"
 
 @st.cache(show_spinner=False)
 def load_data():
-    return pd.read_csv('./scored_texts.csv')
+    return pd.read_csv('../updated_scored_texts.csv')
 
 
 scored_texts_analytics = load_data()
@@ -44,7 +44,7 @@ def model_function():
 classifier = model_function()
 
 
-@st.cache(show_spinner=False)
+#@st.cache(show_spinner=False)
 def split_and_classification(review):
     n = 1500
     func_points = []
