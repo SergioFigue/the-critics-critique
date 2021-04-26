@@ -61,7 +61,7 @@ def split_and_classification(review):
 
 @st.cache(show_spinner=False)
 def insert_img():
-    screenshot = Image.open("./data/media/stadia_platforms.jpg")
+    screenshot = Image.open("../data/media/stadia_platforms.jpg")
 
     return screenshot
 
@@ -80,7 +80,7 @@ if status == "Know the app":
 
     my_slot1 = st.empty()
 
-    st.image(Image.open("./data/media/the_untrustable.jpg"), width=700)
+    st.image(Image.open("../data/media/the_untrustable.jpg"), width=700)
 
     time.sleep(3)
     my_slot1.error('Never!')
