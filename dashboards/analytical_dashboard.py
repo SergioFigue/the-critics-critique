@@ -61,7 +61,7 @@ st.title('The Critics Critique App')
 
 @st.cache(show_spinner=False)
 def insert_img():
-    screenshot = Image.open("../data/media/stadia_platforms.jpg")
+    screenshot = Image.open("../stadia_platforms.jpg")
 
     return screenshot
 
@@ -80,7 +80,7 @@ if status == "Know the app":
 
     my_slot1 = st.empty()
 
-    st.image(Image.open("../data/media/the_untrustable.jpg"), width=700)
+    st.image(Image.open("../the_untrustable.jpg"), width=700)
 
     time.sleep(3)
     my_slot1.error('Never!')
@@ -469,7 +469,7 @@ if status == "How critics score":
 
 if status == "Conclusions":
     st.image(insert_img(), width=450)
-    st.subheader('More than 15,500 review later, this model uncovered the truth:')
+    st.subheader('With more than 16,000 review explored, TCC uncovered the truth:')
     st.markdown('- In 4 out of 5 outlets, human score is frequently better than NLP score')
     st.markdown('- Human scores tent towards extreme opinions, the model is more moderate')
     st.markdown('- Authors make no distinction between platforms')
