@@ -1,16 +1,15 @@
 import streamlit as st
 import pandas as pd
-#import numpy as np
+# import numpy as np
 import time
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-#import requests
-#from bs4 import BeautifulSoup
-#from transformers import pipeline
-#from transformers import AutoTokenizer, AutoModelForSequenceClassification
+# import requests
+# from bs4 import BeautifulSoup
+# from transformers import pipeline
+# from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from PIL import Image
-
 
 st.beta_set_page_config(page_title="The-Critics-Critique-App", layout="centered")
 
@@ -93,8 +92,10 @@ if status == "Know the app":
                 "the **sentiment** said review conveys to the reader according to a **pretrained BERT NLP model**.")
 
     st.subheader('Where data comes from?')
-    st.markdown("Data was extracted scraping five video game outlets, adding more than **16.000 valid reviews**. "
-                "Some texts are 10 years old!")
+    st.markdown("Data was extracted scraping five video game outlets, adding more than **16.000 valid reviews scored**"
+                " from 2 to 10. Some texts are up to 10 years old!")
+
+    st.markdown("The model scores the same reviews with stars (1-5), thus the human score was adjusted to fit.")
 
     st.subheader('What are you trying to tell us?')
     st.markdown("My hypothesis is: **spanish reviewers overrate video games**.")
@@ -303,24 +304,28 @@ if status == "Know the app":
 
 if status == "How critics score":
 
-    st.markdown("*This is how the real score compares with the stars suggested by the model*")
+    st.markdown("*Compare human scores against model stars by 4 different categories*")
 
     st.image(insert_img(), width=450)
 
     # Sidebar 2 - NLP Stars vs Scores
 
-    st.sidebar.subheader("NLP Stars vs Scores")
+    st.sidebar.subheader("Human scores vs Model stars")
     radio_list_down = ["Website", "Author", "Company", "Platform"]
     status = st.sidebar.radio("", radio_list_down, key=2)
 
     if status == 'Website':
 
-        st.subheader('First look site by site')
-        st.markdown('**Mean score deviation** is the difference between score and prediction in % and looks like this')
+        st.subheader('Comparison site by site')
+        st.markdown('**Score deviation** is the difference between human score (adjusted) and stars prediction in %.')
         st.markdown('·*Positive deviation means sentiment is better than score and vice versa*')
 
         site_deviation = scored_texts_analytics.groupby('site')[['score', 'stars_mean', 'score_deviation']].mean()
         st.table(site_deviation)
+
+        st.markdown('The average deviation per site is easier to understand with every single human score plotted.'
+                    ' The distribution along the rating axis draw a **decreasing trend line** meaning that critics save'
+                    ' the best words for great games and go harsher with bad games.')
 
         sites = scored_texts_analytics['site'].unique()
         site = st.selectbox("Select a website", sites)
@@ -356,7 +361,11 @@ if status == "How critics score":
 
     if status == "Author":
 
-        st.subheader('What they write vs how they score')
+        st.subheader('Test your favourite reviewer!')
+
+        st.markdown('Website scores were on average, but there a lot of varied voices adding their own bias.'
+                    ' For the first time, you have to opportunity to critic the critics based on every publication '
+                    ' he/she shared online in any of the selected websites.')
 
         authors = sorted(scored_texts_analytics['author'].unique())
         author = st.selectbox("Who are you looking for?", authors)
@@ -381,10 +390,11 @@ if status == "How critics score":
         elif 0.5 <= abs(points - estimated_stars) <= 1.5:
             st.warning('Not bad, better than Doritos')
         else:
-            st.error('You better change your career, try on Ironhack!')
+            st.error('It s time to perform a self-review')
 
-        st.subheader('Is it a real problem?')
-        st.markdown('**Mean score deviation** is the difference between score and prediction in % and looks like this')
+        st.subheader('How many authors are that much biased?')
+        st.markdown('For this chart, we group authors by their mean score deviation. As we can see, most of them tent'
+                    ' to a negative deviation, but the distribution is quite normal around -5%.')
         st.markdown('·*Positive deviation means sentiment is better than score and vice versa*')
 
         q_authors_filter = scored_texts_analytics.groupby('author').filter(lambda x: len(x) >= 3)
@@ -405,7 +415,7 @@ if status == "How critics score":
             patches[i].set_facecolor(high)
 
         plt.xlabel("Mean score deviation", fontsize=16)
-        plt.ylabel("Authors count", fontsize=16)
+        plt.ylabel("Number of Authors per batch", fontsize=16)
         plt.xticks(fontsize=14)
         plt.yticks(fontsize=14)
 
@@ -416,7 +426,10 @@ if status == "How critics score":
 
     if status == "Company":
         st.subheader('Names matter more than quality?')
-        st.markdown('**Mean score deviation** is the difference between score and prediction in % and looks like this')
+        st.markdown('Great companies make great games and mediocre developers and publishers do what they can. There is'
+                    ' a big, undeniable quality gap. But what if the past affect what comes next? Are we anticipating'
+                    ' that a game is going to be good just because the studio made hits before? Indeed, the model'
+                    ' uncovered **a tendency to speak even better of companies with a great background**.')
         st.markdown('·*Positive deviation means sentiment is better than score and vice versa*')
 
         q_companies_filter = scored_texts_analytics.groupby('company').filter(lambda x: len(x) >= 20)
@@ -432,7 +445,8 @@ if status == "How critics score":
         col2.table(site_deviation_neg)
 
         st.subheader('Tendency: shower with compliments')
-        st.markdown('There is a clear correlation between score and pretty words')
+        st.markdown('There is a clear correlation between score and pretty words. Hover the cursor over the dots to'
+                    'find out more data about every company.')
 
         c_companies = q_companies_filter.groupby('company')[['game']].count().reset_index()
         s_companies = q_companies_filter.groupby('company')[['score_deviation', 'score']].mean().reset_index()
@@ -444,20 +458,24 @@ if status == "How critics score":
         st.plotly_chart(fig4, use_container_width=True)
 
     if status == 'Platform':
-        st.subheader('Focusing on the last console generation and PC')
-        st.markdown('*Left value: real score adjusted (halved), right value: NLP prediction*')
+        st.subheader('The myth of platform disadvantages?')
+        st.markdown('Focusing on the last console generation and PC, we also explored the differences by platform.'
+                    'Feels great to see that there is no real bias against any of them. The chart draw attention'
+                    'to the fact that Switch is considered the worst by humans and the best by the model, but do not be'
+                    'fooled by your eyes, the gap is just a tenth of a point.')
+        st.markdown('*Left value: human score, right value: model prediction (adjusted)*')
 
         switch_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("Switch")]
-        switch_df['score'] = switch_df['score'] / 2
+        switch_df['stars_mean'] = switch_df['stars_mean'] * 2
         switch_plot = switch_df[['score', 'stars_mean']].mean()
         ps4_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("PS4")]
-        ps4_df['score'] = ps4_df['score'] / 2
+        ps4_df['stars_mean'] = ps4_df['stars_mean'] * 2
         ps4_plot = ps4_df[['score', 'stars_mean']].mean()
         xbox_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("Xbox One")]
-        xbox_df['score'] = xbox_df['score'] / 2
+        xbox_df['stars_mean'] = xbox_df['stars_mean'] * 2
         xbox_plot = xbox_df[['score', 'stars_mean']].mean()
         pc_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("PC")]
-        pc_df['score'] = pc_df['score'] / 2
+        pc_df['stars_mean'] = pc_df['stars_mean'] * 2
         pc_plot = pc_df[['score', 'stars_mean']].mean()
 
         platform_plot = ps4_plot.to_frame(name='PS4').join(switch_plot.to_frame(name='Switch')).join(
@@ -470,9 +488,16 @@ if status == "How critics score":
 if status == "Conclusions":
     st.image(insert_img(), width=450)
     st.subheader('With more than 16,000 review explored, TCC uncovered the truth:')
-    st.markdown('- In 4 out of 5 outlets, human score is frequently better than NLP score')
-    st.markdown('- Human scores tent towards extreme opinions, the model is more moderate')
-    st.markdown('- Authors make no distinction between platforms')
-    st.markdown('**In conclusion: Spanish reviewers inflate video games scores, only when the score is fat**')
+    st.markdown('- In 4 out of 5 outlets, human score is greater than NLP model score.')
+    st.markdown('- Human scores tent towards extreme opinions, the model is more moderate.')
+    st.markdown('- Authors make no distinction between platforms.')
+    st.markdown('- The biggest gap is between companies, somehow affected by their past games.')
+    st.markdown('**In conclusion: Spanish reviewers inflate video games scores, only when the score is fat**.')
     st.text("")
-    st.button("Download and Try your self for free!")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.write("Created by Sergio Figueroa. Find me on [LinkedIn](https://www.linkedin.com/in/sergiofigueroamartin/) "
+             "and share my story!")
+    st.write("Download and Try on my [GitHub](https://github.com/SergioFigue/the-critics-critique) page")
