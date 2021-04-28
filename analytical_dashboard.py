@@ -60,7 +60,7 @@ st.title('The Critics Critique App')
 
 @st.cache(show_spinner=False)
 def insert_img():
-    screenshot = Image.open("stadia_platforms.jpg")
+    screenshot = Image.open("critique.jpg")
 
     return screenshot
 
@@ -81,7 +81,7 @@ if status == "Know the app":
 
     st.image(Image.open("the_untrustable.jpg"), width=700)
 
-    time.sleep(3)
+    time.sleep(2)
     my_slot1.error('Never!')
     st.error('Ever!')
 
@@ -91,14 +91,14 @@ if status == "Know the app":
     st.markdown("This dashboard compares how video games critics **score** a review versus "
                 "the **sentiment** said review conveys to the reader according to a **pretrained BERT NLP model**.")
 
-    st.subheader('Where data comes from?')
-    st.markdown("Data was extracted scraping five video game outlets, adding more than **16.000 valid reviews scored**"
-                " from 2 to 10. Some texts are up to 10 years old!")
+    st.subheader('Where does data comes from?')
+    st.markdown("Data was extracted by means of scraping five video game outlets, adding more than **16,000 valid "
+                " reviews scored** from 2 to 10. Some texts are up to 10 years old!")
 
     st.markdown("The model scores the same reviews with stars (1-5), thus the human score was adjusted to fit.")
 
     st.subheader('What are you trying to tell us?')
-    st.markdown("My hypothesis is: **spanish reviewers overrate video games**.")
+    st.markdown("My hypothesis is: **Spanish reviewers overrate video games**.")
 
 # if status == "Take a sample":
 #
@@ -318,7 +318,7 @@ if status == "How critics score":
 
         st.subheader('Comparison site by site')
         st.markdown('**Score deviation** is the difference between human score (adjusted) and stars prediction in %.')
-        st.markdown('·*Positive deviation means sentiment is better than score and vice versa*')
+        st.markdown('· *Positive deviation means sentiment is better than score and vice versa*')
 
         site_deviation = scored_texts_analytics.groupby('site')[['score', 'stars_mean', 'score_deviation']].mean()
         st.table(site_deviation)
@@ -364,7 +364,7 @@ if status == "How critics score":
         st.subheader('Test your favourite reviewer!')
 
         st.markdown('Website scores were on average, but there a lot of varied voices adding their own bias.'
-                    ' For the first time, you have to opportunity to critic the critics based on every publication '
+                    ' For the first time, you have **the opportunity to critic the critics** based on every publication'
                     ' he/she shared online in any of the selected websites.')
 
         authors = sorted(scored_texts_analytics['author'].unique())
@@ -375,7 +375,7 @@ if status == "How critics score":
         if isinstance(points, float):
             points = points.round(2)
 
-        st.write(author, 'Score average is %s' % points)
+        st.write('·', author, 'score average is %s' % points)
 
         estimated_stars = scored_texts_analytics[scored_texts_analytics['author'].str.contains(author)] \
                               ['stars_mean'].mean() * 2
@@ -383,14 +383,14 @@ if status == "How critics score":
         if isinstance(estimated_stars, float):
             estimated_stars = estimated_stars.round(2)
 
-        st.write('Model prediction average (adjusted) is %s' % estimated_stars)
+        st.write('· Model prediction average (adjusted) is %s' % estimated_stars)
 
         if abs(points - estimated_stars) < 0.5:
             st.success('So close! Such a fair reviewer')
         elif 0.5 <= abs(points - estimated_stars) <= 1.5:
             st.warning('Not bad, better than Doritos')
         else:
-            st.error('It s time to perform a self-review')
+            st.error('It is time to perform a self-review')
 
         st.subheader('How many authors are that much biased?')
         st.markdown('For this chart, we group authors by their mean score deviation. As we can see, most of them tent'
@@ -430,7 +430,7 @@ if status == "How critics score":
                     ' a big, undeniable quality gap. But what if the past affect what comes next? Are we anticipating'
                     ' that a game is going to be good just because the studio made hits before? Indeed, the model'
                     ' uncovered **a tendency to speak even better of companies with a great background**.')
-        st.markdown('·*Positive deviation means sentiment is better than score and vice versa*')
+        st.markdown('· *Positive deviation means sentiment is better than score and vice versa*')
 
         q_companies_filter = scored_texts_analytics.groupby('company').filter(lambda x: len(x) >= 20)
         q_companies = q_companies_filter.groupby('company')['score_deviation'].mean()
@@ -463,7 +463,7 @@ if status == "How critics score":
                     'Feels great to see that there is no real bias against any of them. The chart draw attention'
                     'to the fact that Switch is considered the worst by humans and the best by the model, but do not be'
                     'fooled by your eyes, the gap is just a tenth of a point.')
-        st.markdown('*Left value: human score, right value: model prediction (adjusted)*')
+        st.markdown('· *Left value: human score, right value: model prediction (adjusted)*')
 
         switch_df = scored_texts_analytics[scored_texts_analytics['platform'].str.contains("Switch")]
         switch_df['stars_mean'] = switch_df['stars_mean'] * 2
